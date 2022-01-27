@@ -126,45 +126,5 @@ args+=(
 default_arg --gossip-port 8001
 default_arg --log -
 
-
-pid=
-kill_node() {
-  # Note: do not echo anything from this function to ensure $pid is actually
-  # killed when stdout/stderr are redirected
-  set +ex
-  if [[ -n $pid ]]; then
-    declare _pid=$pid
-    pid=
-    kill "$_pid" || true
-    wait "$_pid" || true
-  fi
-}
-
-kill_node_and_exit() {
-  kill_node
-  exit
-}
-
-trap 'kill_node_and_exit' INT TERM ERR
-
-while true; do
-  echo "$program ${args[*]}"
-  $program "${args[@]}" &
-  pid=$!
-  echo "pid: $pid"
-
-  if ((no_restart)); then
-    wait "$pid"
-    exit $?
-  fi
-
-  while true; do
-    if [[ -z $pid ]] || ! kill -0 "$pid"; then
-      echo "############## validator exited, restarting ##############"
-      break
-    fi
-    sleep 1
-  done
-
-  kill_node
-done
+echo "$program ${args[*]}"
+$program "${args[@]}" &
