@@ -127,4 +127,4 @@ default_arg --gossip-port 8001
 default_arg --log -
 
 echo "$program ${args[*]}"
-$program "${args[@]}" &
+$program "${args[@]}"
