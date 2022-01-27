@@ -39,6 +39,7 @@ args=(
   --bootstrap-validator "$SOLANA_CONFIG_DIR"/bootstrap-validator/identity.json
                         "$SOLANA_CONFIG_DIR"/bootstrap-validator/vote-account.json
                         "$SOLANA_CONFIG_DIR"/bootstrap-validator/stake-account.json
+  --slots-per-epoch 3600
 )
 
 "$SOLANA_ROOT"/fetch-spl.sh

@@ -19,6 +19,7 @@ no_restart=0
 gossip_entrypoint=
 ledger_dir=
 maybe_allow_private_addr=
+commision=100
 
 usage() {
   if [[ -n $1 ]]; then
@@ -41,6 +42,7 @@ OPTIONS:
   --rpc-port port           - custom RPC port for this node
   --no-restart              - do not restart the node if it exits
   --no-airdrop              - The genesis config has an account for the node. Airdrops are not required.
+  --commission COMMISSION    - POS Commision (default 100)
 
 EOF
   exit 1
@@ -171,6 +173,9 @@ while [[ -n $1 ]]; do
     elif [[ $1 == --skip-require-tower ]]; then
       maybeRequireTower=false
       shift
+    elif [[ $1 = --commission ]]; then
+      commission=$2
+      shift 2
     elif [[ $1 = -h ]]; then
       usage "$@"
     else
@@ -307,7 +312,7 @@ setup_validator_accounts() {
     fi
 
     echo "Creating validator vote account"
-    wallet create-vote-account "$vote_account" "$identity" "$authorized_withdrawer" || return $?
+    wallet create-vote-account "$vote_account" "$identity" "$authorized_withdrawer" ----commission $commission || return $?
   fi
   echo "Validator vote account configured"
 
